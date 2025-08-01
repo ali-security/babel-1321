@@ -226,7 +226,11 @@ describe("evaluation", function () {
     expect(result.deopt.type).toBe("Identifier");
     expect(result.deopt.node.name).toBe("foo");
   });
-
+  it("should not evaluate inherited methods", function () {
+    const path = getPath("Math.hasOwnProperty('min')");
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
   it("sets deopt properly when confident after evaluating multiple expressions", () => {
     const ast = parse(`
       const foo = 'foo';
